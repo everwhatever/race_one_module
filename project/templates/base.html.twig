@@ -13,9 +13,9 @@
     </head>
     <body>
     <nav class="nav nav-pills flex-column flex-sm-row">
-        <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path }}">Strona główna</a>
-        <a class="flex-sm-fill text-sm-center nav-link" href="#">Longer nav link</a>
-        <a class="flex-sm-fill text-sm-center nav-link" href="#">Link</a>
+        <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('index') }}">Strona główna</a>
+        <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_login') }}">Zaloguj się</a>
+        <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_register') }}">Zarejestruj się</a>
     </nav>
         {% block body %}{% endblock %}
     </body>
