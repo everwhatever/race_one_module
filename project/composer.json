@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "9999999-dev",
         "doctrine/doctrine-migrations-bundle": "9999999-dev",
         "doctrine/orm": "9999999-dev",
+        "sensio/framework-extra-bundle": "6.0.x-dev",
         "symfony/console": "5.*",
         "symfony/dotenv": "5.*",
         "symfony/flex": "^1.3.1",
