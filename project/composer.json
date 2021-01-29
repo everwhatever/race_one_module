@@ -16,7 +16,10 @@
         "symfony/framework-bundle": "5.*",
         "symfony/proxy-manager-bridge": "5.*",
         "symfony/security-bundle": "5.*",
-        "symfony/yaml": "5.*"
+        "symfony/twig-bundle": "5.*",
+        "symfony/yaml": "5.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "optimize-autoloader": true,
