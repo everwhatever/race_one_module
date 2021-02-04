@@ -29,9 +29,15 @@ class Race
      */
     private $drivers;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Time::class, mappedBy="races")
+     */
+    private $times;
+
     public function __construct()
     {
         $this->drivers = new ArrayCollection();
+        $this->times = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,6 +79,36 @@ class Race
     {
         if ($this->drivers->removeElement($driver)) {
             $driver->removeRace($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Time[]
+     */
+    public function getTimes(): Collection
+    {
+        return $this->times;
+    }
+
+    public function addTime(Time $time): self
+    {
+        if (!$this->times->contains($time)) {
+            $this->times[] = $time;
+            $time->setRaces($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTime(Time $time): self
+    {
+        if ($this->times->removeElement($time)) {
+            // set the owning side to null (unless already changed)
+            if ($time->getRaces() === $this) {
+                $time->setRaces(null);
+            }
         }
 
         return $this;

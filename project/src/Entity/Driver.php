@@ -43,9 +43,15 @@ class Driver implements UserInterface
      */
     private $races;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Time::class, mappedBy="drivers")
+     */
+    private $times;
+
     public function __construct()
     {
         $this->races = new ArrayCollection();
+        $this->times = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,6 +152,36 @@ class Driver implements UserInterface
     public function removeRace(Race $race): self
     {
         $this->races->removeElement($race);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Time[]
+     */
+    public function getTimes(): Collection
+    {
+        return $this->times;
+    }
+
+    public function addTime(Time $time): self
+    {
+        if (!$this->times->contains($time)) {
+            $this->times[] = $time;
+            $time->setDrivers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTime(Time $time): self
+    {
+        if ($this->times->removeElement($time)) {
+            // set the owning side to null (unless already changed)
+            if ($time->getDrivers() === $this) {
+                $time->setDrivers(null);
+            }
+        }
 
         return $this;
     }

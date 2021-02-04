@@ -6,6 +6,7 @@ use App\Entity\Driver;
 use App\Entity\Race;
 use App\Form\GetEmailsFormType;
 use App\Services\FetchDriversService;
+use App\Services\RaceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,12 +22,14 @@ class RaceController extends AbstractController
 
     private EntityManagerInterface $entityManager;
     private FetchDriversService $driversService;
+    private RaceService $raceService;
 
 
-    public function __construct(EntityManagerInterface $entityManager, FetchDriversService $driversService)
+    public function __construct(EntityManagerInterface $entityManager, FetchDriversService $driversService, RaceService $raceService)
     {
         $this->entityManager = $entityManager;
         $this->driversService = $driversService;
+        $this->raceService = $raceService;
     }
 
     /**
@@ -40,6 +43,8 @@ class RaceController extends AbstractController
     /**
      * @Route("/choose", name="app_choose_drivers")
      * @IsGranted("ROLE_USER")
+     * @param Request $request
+     * @return Response
      */
     public function chooseDriversAction(Request $request): Response
     {
@@ -65,14 +70,19 @@ class RaceController extends AbstractController
     /**
      * @Route("/race/{id}", name="app_race")
      * @IsGranted("ROLE_USER")
+     * @param int $id
+     * @return Response
      */
-    public function raceAction(Request $request, int $id): Response
+    public function raceAction(int $id): Response
     {
         $repository = $this->entityManager->getRepository(Race::class);
         $race = $repository->findOneBy(['id'=>$id]);
 
+        $times = $this->raceService->setSimulatedParams($race);
+
         return $this->render('race/race.html.twig',[
-            'race' => $race
+            'race' => $race,
+            'times' => $times
         ]);
     }
 }
