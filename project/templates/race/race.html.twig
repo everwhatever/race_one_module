@@ -24,7 +24,7 @@
                 {% for time in times %}
                     <tr>
                         <th scope="row">{{ time.getPosition() }}</th>
-                        <td>{{ time.getDrivers().getEmail() }}</td>
+                        <td><a href="{{ path('app_driver', {'id': time.getDrivers().getId()}) }}">{{ time.getDrivers().getEmail() }}</a></td>
                         <td>{{ time.getTime()|date("H:i:s") }}</td>
                     </tr>
                 {% endfor %}

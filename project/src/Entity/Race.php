@@ -34,6 +34,11 @@ class Race
      */
     private $times;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
     public function __construct()
     {
         $this->drivers = new ArrayCollection();
@@ -110,6 +115,18 @@ class Race
                 $time->setRaces(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
