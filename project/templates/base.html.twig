@@ -17,11 +17,14 @@
             <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('index') }}">Strona główna</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_driver',{'id':app.user.getId()}) }}">Mój profil</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_all_drivers') }}">Kierowcy</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_all_races') }}">Wyścigi</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_logout') }}">Wyloguj się</a>
         </nav>
     {% else %}
         <nav class="nav nav-pills flex-column flex-sm-row">
             <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('index') }}">Strona główna</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_all_drivers') }}">Kierowcy</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_all_races') }}">Wyścigi</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_login') }}">Zaloguj się</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_register') }}">Zarejestruj się</a>
         </nav>

@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Driver;
 use App\Entity\Race;
+use App\Entity\Time;
 use App\Form\GetEmailsFormType;
+use App\Form\GetRaceNameType;
 use App\Services\FetchDriversService;
 use App\Services\RaceService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -63,7 +65,7 @@ class RaceController extends AbstractController
         }
 
         return $this->render('race/choose_drivers.html.twig',[
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -83,6 +85,39 @@ class RaceController extends AbstractController
         return $this->render('race/race.html.twig',[
             'race' => $race,
             'times' => $times
+        ]);
+    }
+
+    /**
+     * @Route("/races", name="app_all_races")
+     * @return Response
+     */
+    public function displayAllRaces(): Response
+    {
+        $repository = $this->entityManager->getRepository(Race::class);
+        $races = $repository->findAll();
+
+        return $this->render('race/display_all_races.html.twig',[
+           'races' => $races
+        ]);
+    }
+
+    /**
+     * @Route("/show/race/{id}", name="app_show_one_race")
+     * @param int $id
+     * @return Response
+     */
+    public function showOneRace(int $id): Response
+    {
+        $raceRepository = $this->entityManager->getRepository(Race::class);
+        $race = $raceRepository->findOneBy(['id'=>$id]);
+
+        $timeRepository = $this->entityManager->getRepository(Time::class);
+        $times = $timeRepository->findBy(['races'=>$race]);
+
+        return $this->render('race/show_one_race.html.twig',[
+            'race'=>$race,
+            'times'=>$times
         ]);
     }
 }
