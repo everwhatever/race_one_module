@@ -16,20 +16,20 @@ class GetEmailsFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EntityType::class,[
-                'class'=>Driver::class,
-                'choice_label'=>function(Driver $driver){
-                    return sprintf("(%d) %s",$driver->getId(),$driver->getEmail());
+            ->add('email', EntityType::class, [
+                'class' => Driver::class,
+                'choice_label' => function (Driver $driver) {
+                    return sprintf("(%d) %s", $driver->getId(), $driver->getEmail());
                 },
-                'placeholder'=>'choose a driver',
+                'placeholder' => 'choose a driver',
                 'expanded' => true,
                 'multiple' => true,
                 'required' => true,
             ])
-            ->add('name', TextType::class,[
+            ->add('name', TextType::class, [
                 'attr' => ['placeholder' => 'nazwa wyścigu',
                     'label' => 'wpisz nazwę',
-                    'required'=>true]
+                    'required' => true]
             ])
             ->add('send', SubmitType::class);
     }

@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Driver;
 use App\Entity\Race;
 use App\Entity\Time;
 use App\Form\GetEmailsFormType;
-use App\Form\GetRaceNameType;
 use App\Services\FetchDriversService;
 use App\Services\RaceService;
+use App\Services\TimeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,21 +16,22 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
-
-
 class RaceController extends AbstractController
 {
 
     private EntityManagerInterface $entityManager;
     private FetchDriversService $driversService;
     private RaceService $raceService;
+    private TimeService $timeService;
 
 
-    public function __construct(EntityManagerInterface $entityManager, FetchDriversService $driversService, RaceService $raceService)
+    public function __construct(EntityManagerInterface $entityManager, FetchDriversService $driversService,
+                                RaceService $raceService, TimeService $timeService)
     {
         $this->entityManager = $entityManager;
         $this->driversService = $driversService;
         $this->raceService = $raceService;
+        $this->timeService = $timeService;
     }
 
     /**
@@ -50,21 +50,16 @@ class RaceController extends AbstractController
      */
     public function chooseDriversAction(Request $request): Response
     {
-        $repository = $this->entityManager->getRepository(Driver::class);
-
         $form = $this->createForm(GetEmailsFormType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
-            $race = $this->driversService->fetchDriversByEmail($form, $repository);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $race = $this->raceService->createRaceWithDrivers($form);
 
-            $this->entityManager->persist($race);
-            $this->entityManager->flush();
-
-            return $this->redirectToRoute('app_race',['id'=>$race->getId()]);
+            return $this->redirectToRoute('app_race', ['id' => $race->getId()]);
         }
 
-        return $this->render('race/choose_drivers.html.twig',[
+        return $this->render('race/choose_drivers.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -77,12 +72,12 @@ class RaceController extends AbstractController
      */
     public function raceAction(int $id): Response
     {
-        $repository = $this->entityManager->getRepository(Race::class);
-        $race = $repository->findOneBy(['id'=>$id]);
+        $raceRepository = $this->entityManager->getRepository(Race::class);
+        $race = $raceRepository->findOneBy(['id' => $id]);
 
-        $times = $this->raceService->setSimulatedParams($race);
+        $times = $this->timeService->setSimulatedParams($race);
 
-        return $this->render('race/race.html.twig',[
+        return $this->render('race/race.html.twig', [
             'race' => $race,
             'times' => $times
         ]);
@@ -92,13 +87,13 @@ class RaceController extends AbstractController
      * @Route("/races", name="app_all_races")
      * @return Response
      */
-    public function displayAllRaces(): Response
+    public function displayAllRacesAction(): Response
     {
-        $repository = $this->entityManager->getRepository(Race::class);
-        $races = $repository->findAll();
+        $raceRepository = $this->entityManager->getRepository(Race::class);
+        $races = $raceRepository->findAll();
 
-        return $this->render('race/display_all_races.html.twig',[
-           'races' => $races
+        return $this->render('race/display_all_races.html.twig', [
+            'races' => $races
         ]);
     }
 
@@ -107,17 +102,17 @@ class RaceController extends AbstractController
      * @param int $id
      * @return Response
      */
-    public function showOneRace(int $id): Response
+    public function displayOneRaceAction(int $id): Response
     {
         $raceRepository = $this->entityManager->getRepository(Race::class);
-        $race = $raceRepository->findOneBy(['id'=>$id]);
+        $race = $raceRepository->findOneBy(['id' => $id]);
 
         $timeRepository = $this->entityManager->getRepository(Time::class);
-        $times = $timeRepository->findBy(['races'=>$race]);
+        $times = $timeRepository->findBy(['races' => $race]);
 
-        return $this->render('race/show_one_race.html.twig',[
-            'race'=>$race,
-            'times'=>$times
+        return $this->render('race/show_one_race.html.twig', [
+            'race' => $race,
+            'times' => $times
         ]);
     }
 }

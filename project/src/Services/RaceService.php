@@ -3,14 +3,14 @@
 
 namespace App\Services;
 
-
+use App\Entity\Driver;
 use App\Entity\Race;
-use App\Entity\Time;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
 
 class RaceService
 {
-
 
     private EntityManagerInterface $entityManager;
 
@@ -20,70 +20,46 @@ class RaceService
     }
 
     /**
-     * @param Race $race
-     * @return array
+     * @param FormInterface $form
+     * @return Race
      */
-    public function setSimulatedParams(Race $race): array
+    public function createRaceWithDrivers(FormInterface $form): Race
     {
-        $drivers = $race->getDrivers();
-        $times =[];
+        $information = $this->fetchInformationToCreateRace($form);
 
-        foreach ($drivers as $driver){
-            $time = $this->simulateTime();
-            $driver->addTime($time);
-            $race->addTime($time);
-            $this->entityManager->persist($time);
-            $this->entityManager->flush();
-
-            array_push($times, $time);
+        $race = new Race();
+        $race->setDate(new DateTime());
+        $race->setName($information['raceName']);
+        foreach ($information['driversEmails'] as $item) {
+            $race->addDriver($information['driversRepository']->findOneBy(['email' => $item]));
         }
 
-        $timesWithPositions = $this->assignPositions($times);
+        $this->entityManager->persist($race);
+        $this->entityManager->flush();
 
-        return $this->addTimesToDatabase($timesWithPositions);
+        return $race;
     }
 
     /**
-     * @param array $times
+     * @param FormInterface $form
      * @return array
      */
-    private function addTimesToDatabase(array $times): array
+    private function fetchInformationToCreateRace(FormInterface $form): array
     {
-        foreach ($times as $time){
-            $this->entityManager->persist($time);
-            $this->entityManager->flush();
+        $information = [];
+        $driversRepository = $this->entityManager->getRepository(Driver::class);
+        $driversService = new FetchDriversService();
+        $driversEmails = $driversService->fetchDriversByEmail($form);
+        $raceName = $form['name']->getData();
+
+        if ($raceName === null) {
+            $raceName = "default";
         }
 
-        return $times;
-    }
+        $information['driversRepository'] = $driversRepository;
+        $information['driversEmails'] = $driversEmails;
+        $information['raceName'] = $raceName;
 
-    /**
-     * @return Time
-     */
-    private function simulateTime(): Time
-    {
-        $time = new Time();
-        $time->setTime(gmdate("H:i:s", rand(512,600)));
-
-        return $time;
-    }
-
-    /**
-     * @param array $times
-     * @return array
-     */
-    private function assignPositions(array $times): array
-    {
-        $position = 1;
-        usort($times, function($a, $b) {
-            return $a->getTime() <=> $b->getTime();
-        });
-        /** @var Time $time */
-        foreach ($times as $time){
-            $time->setPosition($position);
-            $position++;
-        }
-
-        return $times;
+        return $information;
     }
 }

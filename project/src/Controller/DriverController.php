@@ -25,7 +25,7 @@ class DriverController extends AbstractController
      * @param int $id
      * @return Response
      */
-    public function showDriverProfile(int $id): Response
+    public function displayOneDriverProfileAction(int $id): Response
     {
         $repository = $this->entityManager->getRepository(Driver::class);
         $timeRepository = $this->entityManager->getRepository(Time::class);
@@ -43,7 +43,7 @@ class DriverController extends AbstractController
      *
      * @return Response
      */
-    public function displayAllDrivers(): Response
+    public function displayAllDriversProfilesAction(): Response
     {
         $repository = $this->entityManager->getRepository(Driver::class);
         $drivers = $repository->findAll();
