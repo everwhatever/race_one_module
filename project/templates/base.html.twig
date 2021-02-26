@@ -30,6 +30,10 @@
         </nav>
     {% endif %}
 
+    {% if is_granted("ROLE_ADMIN") %}
+        <h4>ADMIN</h4>
+    {% endif %}
+
         {% block body %}{% endblock %}
     </body>
 </html>
