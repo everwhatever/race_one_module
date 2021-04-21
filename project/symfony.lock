@@ -26,6 +26,9 @@
     "doctrine/dbal": {
         "version": "2.12.x-dev"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
         "recipe": {
@@ -226,6 +229,9 @@
     },
     "symfony/orm-pack": {
         "version": "dev-main"
+    },
+    "symfony/password-hasher": {
+        "version": "5.x-dev"
     },
     "symfony/polyfill-intl-grapheme": {
         "version": "1.22-dev"

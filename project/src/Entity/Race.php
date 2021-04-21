@@ -39,6 +39,11 @@ class Race
      */
     private $name;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=League::class, inversedBy="Races")
+     */
+    private $league;
+
     public function __construct()
     {
         $this->drivers = new ArrayCollection();
@@ -127,6 +132,18 @@ class Race
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLeague(): ?League
+    {
+        return $this->league;
+    }
+
+    public function setLeague(?League $league): self
+    {
+        $this->league = $league;
 
         return $this;
     }

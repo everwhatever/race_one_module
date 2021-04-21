@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RaceController!{% endblock %}
+
+{% block body %}
+
+    <div class="d-flex align-items-center justify-content-center" style="height: 35px">
+        <h2>{{ league.getName() }}</h2>
+    </div>
+
+
+
+    <div class="d-flex align-items-center justify-content-center" >
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">pozycja</th>
+                <th scope="col">kierowca</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for driver, position in league.getPositions() %}
+                <tr>
+                    <th scope="row">{{ position }}</th>
+                    <td>{{ driver }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

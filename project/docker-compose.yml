@@ -8,6 +8,7 @@ services:
       environment:
         MYSQL_ROOT_PASSWORD: admin123
         MYSQL_DATABASE: car_race_docerize
+        TZ: Europe/London
 
     nginx:
       image: nginx:alpine

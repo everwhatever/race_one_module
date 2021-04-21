@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Race;
 use App\Entity\Time;
-use App\Form\GetEmailsFormType;
-use App\Services\FetchDriversService;
-use App\Services\RaceService;
+use App\Form\CreateRaceType;
 use App\Services\TimeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,17 +18,12 @@ class RaceController extends AbstractController
 {
 
     private EntityManagerInterface $entityManager;
-    private FetchDriversService $driversService;
-    private RaceService $raceService;
     private TimeService $timeService;
 
 
-    public function __construct(EntityManagerInterface $entityManager, FetchDriversService $driversService,
-                                RaceService $raceService, TimeService $timeService)
+    public function __construct(EntityManagerInterface $entityManager, TimeService $timeService)
     {
         $this->entityManager = $entityManager;
-        $this->driversService = $driversService;
-        $this->raceService = $raceService;
         $this->timeService = $timeService;
     }
 
@@ -50,11 +43,15 @@ class RaceController extends AbstractController
      */
     public function chooseDriversAction(Request $request): Response
     {
-        $form = $this->createForm(GetEmailsFormType::class);
+        $form = $this->createForm(CreateRaceType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $race = $this->raceService->createRaceWithDrivers($form);
+            $race = $form->getData();
+            $race->setDate(new \DateTime());
+
+            $this->entityManager->persist($race);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_race', ['id' => $race->getId()]);
         }

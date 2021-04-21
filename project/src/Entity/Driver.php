@@ -48,10 +48,16 @@ class Driver implements UserInterface
      */
     private $times;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=League::class, mappedBy="Drivers")
+     */
+    private $leagues;
+
     public function __construct()
     {
         $this->races = new ArrayCollection();
         $this->times = new ArrayCollection();
+        $this->leagues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,6 +187,33 @@ class Driver implements UserInterface
             if ($time->getDrivers() === $this) {
                 $time->setDrivers(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|League[]
+     */
+    public function getLeagues(): Collection
+    {
+        return $this->leagues;
+    }
+
+    public function addLeague(League $league): self
+    {
+        if (!$this->leagues->contains($league)) {
+            $this->leagues[] = $league;
+            $league->addDriver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLeague(League $league): self
+    {
+        if ($this->leagues->removeElement($league)) {
+            $league->removeDriver($this);
         }
 
         return $this;

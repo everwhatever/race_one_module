@@ -3,7 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+        <script
+                src="https://code.jquery.com/jquery-2.2.4.min.js"
+                integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+                crossorigin="anonymous"></script>
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
 
@@ -18,21 +21,24 @@
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_driver',{'id':app.user.getId()}) }}">Mój profil</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_all_drivers') }}">Kierowcy</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_all_races') }}">Wyścigi</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('league_display_all') }}">Ligi</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_logout') }}">Wyloguj się</a>
+            {% if is_granted("ROLE_ADMIN") %}
+                <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('league_create') }}">Stwórz ligę</a>
+            {% endif %}
         </nav>
     {% else %}
         <nav class="nav nav-pills flex-column flex-sm-row">
             <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('index') }}">Strona główna</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_all_drivers') }}">Kierowcy</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_all_races') }}">Wyścigi</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('league_display_all') }}">Ligi</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_login') }}">Zaloguj się</a>
             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('app_register') }}">Zarejestruj się</a>
         </nav>
     {% endif %}
 
-    {% if is_granted("ROLE_ADMIN") %}
-        <h4>ADMIN</h4>
-    {% endif %}
+
 
         {% block body %}{% endblock %}
     </body>
