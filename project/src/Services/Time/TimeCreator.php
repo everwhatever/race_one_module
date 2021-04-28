@@ -1,20 +1,22 @@
 <?php
 
 
-namespace App\Services;
+namespace App\Services\Time;
 
 
 use App\Entity\Race;
 use App\Entity\Time;
 use Doctrine\ORM\EntityManagerInterface;
 
-class TimeService
+class TimeCreator
 {
 
+    private TimeSaver $timeSaver;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(TimeSaver $timeSaver, EntityManagerInterface $entityManager)
     {
+        $this->timeSaver = $timeSaver;
         $this->entityManager = $entityManager;
     }
 
@@ -28,7 +30,7 @@ class TimeService
         $times = [];
 
         foreach ($drivers as $driver) {
-            $time = $this->simulateTime();
+            $time = $this->createSimulatedTime();
             $driver->addTime($time);
             $race->addTime($time);
             $this->entityManager->persist($time);
@@ -39,27 +41,15 @@ class TimeService
 
         $timesWithPositions = $this->assignPositions($times);
 
-        return $this->addTimesToDatabase($timesWithPositions);
+        return $this->timeSaver->addTimesToDatabase($timesWithPositions);
     }
 
-    /**
-     * @param array $times
-     * @return array
-     */
-    private function addTimesToDatabase(array $times): array
-    {
-        foreach ($times as $time) {
-            $this->entityManager->persist($time);
-            $this->entityManager->flush();
-        }
 
-        return $times;
-    }
 
     /**
      * @return Time
      */
-    private function simulateTime(): Time
+    private function createSimulatedTime(): Time
     {
         $time = new Time();
         $time->setTime(gmdate("H:i:s", rand(512, 600)));

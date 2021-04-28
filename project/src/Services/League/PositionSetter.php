@@ -4,13 +4,13 @@
 namespace App\Services\League;
 
 
-use App\Services\TimeService;
+use App\Services\Time\TimeCreator;
 
 class PositionSetter
 {
-    private TimeService $timeService;
+    private TimeCreator $timeService;
 
-    public function __construct(TimeService $timeService)
+    public function __construct(TimeCreator $timeService)
     {
         $this->timeService = $timeService;
     }

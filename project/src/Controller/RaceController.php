@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Race;
 use App\Entity\Time;
 use App\Form\CreateRaceType;
-use App\Services\TimeService;
+use App\Services\Time\TimeCreator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +18,10 @@ class RaceController extends AbstractController
 {
 
     private EntityManagerInterface $entityManager;
-    private TimeService $timeService;
+    private TimeCreator $timeService;
 
 
-    public function __construct(EntityManagerInterface $entityManager, TimeService $timeService)
+    public function __construct(EntityManagerInterface $entityManager, TimeCreator $timeService)
     {
         $this->entityManager = $entityManager;
         $this->timeService = $timeService;
