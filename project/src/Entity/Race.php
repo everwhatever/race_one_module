@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\RaceRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=RaceRepository::class)
@@ -17,34 +19,34 @@ class Race
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $date;
+    private ?DateTimeInterface $date;
 
     /**
      * @ORM\ManyToMany(targetEntity=Driver::class, mappedBy="races")
      */
-    private $drivers;
+    private ArrayCollection $drivers;
 
     /**
      * @ORM\OneToMany(targetEntity=Time::class, mappedBy="races")
      */
-    private $times;
+    private ArrayCollection $times;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=League::class, inversedBy="Races")
      */
-    private $league;
+    private ?League $league;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->drivers = new ArrayCollection();
         $this->times = new ArrayCollection();
@@ -55,12 +57,12 @@ class Race
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(DateTimeInterface $date): self
     {
         $this->date = $date;
 
@@ -68,7 +70,7 @@ class Race
     }
 
     /**
-     * @return Collection|Driver[]
+     * @return Collection
      */
     public function getDrivers(): Collection
     {
@@ -95,7 +97,7 @@ class Race
     }
 
     /**
-     * @return Collection|Time[]
+     * @return Collection
      */
     public function getTimes(): Collection
     {

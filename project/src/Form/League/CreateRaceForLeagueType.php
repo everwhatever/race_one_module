@@ -15,15 +15,15 @@ class CreateRaceForLeagueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', TextType::class, [
-                        'attr' => ['placeholder' => 'nazwa wyścigu',
-                            'label' => 'wpisz nazwę wyścigu']
-                    ]);
+            'attr' => ['placeholder' => 'nazwa wyścigu',
+                'label' => 'wpisz nazwę wyścigu']
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'=>Race::class
+            'data_class' => Race::class
         ]);
     }
 

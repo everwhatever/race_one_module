@@ -29,10 +29,10 @@ class DriverController extends AbstractController
     {
         $repository = $this->entityManager->getRepository(Driver::class);
         $timeRepository = $this->entityManager->getRepository(Time::class);
-        $driver = $repository->findOneBy(['id'=>$id]);
-        $times = $timeRepository->findBy(['drivers'=>$driver]);
+        $driver = $repository->findOneBy(['id' => $id]);
+        $times = $timeRepository->findBy(['drivers' => $driver]);
 
-        return $this->render('driver/show_driver_profile.html.twig',[
+        return $this->render('driver/show_driver_profile.html.twig', [
             'driver' => $driver,
             'times' => $times
         ]);
@@ -48,8 +48,8 @@ class DriverController extends AbstractController
         $repository = $this->entityManager->getRepository(Driver::class);
         $drivers = $repository->findAll();
 
-        return $this->render('driver/display_all_drivers.html.twig',[
-           'drivers' => $drivers
+        return $this->render('driver/display_all_drivers.html.twig', [
+            'drivers' => $drivers
         ]);
     }
 }

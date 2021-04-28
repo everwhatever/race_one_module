@@ -15,27 +15,27 @@ class Time
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $time;
+    private string $time;
 
     /**
      * @ORM\ManyToOne(targetEntity=Driver::class, inversedBy="times")
      */
-    private $drivers;
+    private ?Driver $drivers;
 
     /**
      * @ORM\ManyToOne(targetEntity=Race::class, inversedBy="times")
      */
-    private $races;
+    private ?Race $races;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $position;
+    private ?int $position;
 
     public function getId(): ?int
     {

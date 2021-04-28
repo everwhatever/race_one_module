@@ -21,7 +21,8 @@ class RegistrationController extends AbstractController
     private NormalDriverCreatorStrategy $normalDriverCreatorStrategy;
     private AdminCreatorStrategy $adminCreatorStrategy;
 
-    public function __construct(NormalDriverCreatorStrategy $normalDriverCreatorStrategy, AdminCreatorStrategy $adminCreatorStrategy)
+    public function __construct(NormalDriverCreatorStrategy $normalDriverCreatorStrategy,
+                                AdminCreatorStrategy $adminCreatorStrategy)
     {
         $this->normalDriverCreatorStrategy = $normalDriverCreatorStrategy;
         $this->adminCreatorStrategy = $adminCreatorStrategy;
@@ -30,7 +31,8 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder,
+                             GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
         $form = $this->createForm(RegistrationFormType::class);
         $form->handleRequest($request);
@@ -66,7 +68,9 @@ class RegistrationController extends AbstractController
      * @Route("/adminregister", name="app_register_admin")
      * @IsGranted("ROLE_USER")
      */
-    public function registerAdmin(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
+    public function registerAdmin(Request $request, UserPasswordEncoderInterface $passwordEncoder,
+                                  GuardAuthenticatorHandler $guardHandler,
+                                  LoginFormAuthenticator $authenticator): Response
     {
         $form = $this->createForm(RegistrationFormType::class);
         $form->handleRequest($request);

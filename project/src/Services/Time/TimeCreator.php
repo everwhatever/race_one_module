@@ -45,7 +45,6 @@ class TimeCreator
     }
 
 
-
     /**
      * @return Time
      */

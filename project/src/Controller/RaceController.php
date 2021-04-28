@@ -6,6 +6,7 @@ use App\Entity\Race;
 use App\Entity\Time;
 use App\Form\CreateRaceType;
 use App\Services\Time\TimeCreator;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,7 @@ class RaceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $race = $form->getData();
-            $race->setDate(new \DateTime());
+            $race->setDate(new DateTime());
 
             $this->entityManager->persist($race);
             $this->entityManager->flush();

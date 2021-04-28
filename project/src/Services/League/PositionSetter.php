@@ -67,7 +67,8 @@ class PositionSetter
     private function sumDriversPositions(array $times, array $leagueDriversPoints): array
     {
         foreach ($times as $time) {
-            $leagueDriversPoints[$time->getDrivers()->getEmail()] = $leagueDriversPoints[$time->getDrivers()->getEmail()] + $time->getPosition();
+            $leagueDriversPoints[$time->getDrivers()->getEmail()] =
+                $leagueDriversPoints[$time->getDrivers()->getEmail()] + $time->getPosition();
         }
         return $leagueDriversPoints;
     }

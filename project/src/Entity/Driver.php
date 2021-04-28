@@ -6,12 +6,14 @@ use App\Repository\DriverRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=DriverRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @method string getUserIdentifier()
  */
 class Driver implements UserInterface
 {
@@ -20,40 +22,40 @@ class Driver implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\ManyToMany(targetEntity=Race::class, inversedBy="drivers")
      */
-    private $races;
+    private ArrayCollection $races;
 
     /**
      * @ORM\OneToMany(targetEntity=Time::class, mappedBy="drivers")
      */
-    private $times;
+    private ArrayCollection $times;
 
     /**
      * @ORM\ManyToMany(targetEntity=League::class, mappedBy="Drivers")
      */
-    private $leagues;
+    private ArrayCollection $leagues;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->races = new ArrayCollection();
         $this->times = new ArrayCollection();
@@ -84,7 +86,7 @@ class Driver implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -111,7 +113,7 @@ class Driver implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -139,7 +141,7 @@ class Driver implements UserInterface
     }
 
     /**
-     * @return Collection|Race[]
+     * @return Collection
      */
     public function getRaces(): Collection
     {
@@ -163,7 +165,7 @@ class Driver implements UserInterface
     }
 
     /**
-     * @return Collection|Time[]
+     * @return Collection
      */
     public function getTimes(): Collection
     {
@@ -193,7 +195,7 @@ class Driver implements UserInterface
     }
 
     /**
-     * @return Collection|League[]
+     * @return Collection
      */
     public function getLeagues(): Collection
     {
@@ -217,5 +219,10 @@ class Driver implements UserInterface
         }
 
         return $this;
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        // TODO: Implement @method string getUserIdentifier()
     }
 }
