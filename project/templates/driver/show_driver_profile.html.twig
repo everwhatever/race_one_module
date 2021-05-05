@@ -5,7 +5,7 @@
 {% block body %}
 
     <div class="d-flex align-items-center justify-content-center" style="height: 35px">
-        <h2>{{ driver.getEmail() }}</h2>
+        <h2>{{ driverEmail }}</h2>
     </div>
 
     <div class="d-flex align-items-center justify-content-center" style="height: 35px">
@@ -18,18 +18,17 @@
             <thead>
             <tr>
                 <th scope="col">pozycja</th>
-                <th scope="col">kierowca</th>
                 <th scope="col">wyscig</th>
                 <th scope="col">czas</th>
             </tr>
             </thead>
             <tbody>
-            {% for time in times %}
+            {% for result in results %}
                 <tr>
-                    <th scope="row">{{ time.getPosition() }}</th>
-                    <td>{{ time.getDrivers().getEmail() }}</td>
-                    <td><a style="" href="{{ path('app_show_one_race',{'id':time.getRaces().getId()}) }}">{{ time.getRaces().getName() }}</a></td>
-                    <td>{{ time.getTime()|date("H:i:s") }}</td>
+                    <th scope="row">{{ result.getPosition() }}</th>
+                    <td><a style="" href="{{ path('app_show_one_race',{'id':result.getRaceId()}) }}">
+                            {{ result.getRaceName() }}</a></td>
+                    <td>{{ result.getRaceTime()|date("H:i:s") }}</td>
                 </tr>
             {% endfor %}
 

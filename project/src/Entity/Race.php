@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\RaceRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=RaceRepository::class)
@@ -29,12 +29,12 @@ class Race
     /**
      * @ORM\ManyToMany(targetEntity=Driver::class, mappedBy="races")
      */
-    private ArrayCollection $drivers;
+    private Collection $drivers;
 
     /**
      * @ORM\OneToMany(targetEntity=Time::class, mappedBy="races")
      */
-    private ArrayCollection $times;
+    private Collection $times;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -46,10 +46,39 @@ class Race
      */
     private ?League $league;
 
-    #[Pure] public function __construct()
+    private function __construct(string $name, array $drivers)
     {
         $this->drivers = new ArrayCollection();
         $this->times = new ArrayCollection();
+
+        $this->name = $name;
+        $this->addDrivers($drivers);
+        $this->date = new DateTime();
+    }
+
+    /**
+     * @param Driver[] $drivers
+     */
+    private function addDrivers(array $drivers): void
+    {
+        foreach ($drivers as $driver) {
+            $this->addDriver($driver);
+        }
+    }
+
+    public function addDriver(Driver $driver): self
+    {
+        if (!$this->drivers->contains($driver)) {
+            $this->drivers[] = $driver;
+            $driver->addRace($this);
+        }
+
+        return $this;
+    }
+
+    public static function create(string $name, array $drivers): self
+    {
+        return new self($name, $drivers);
     }
 
     public function getId(): ?int
@@ -75,16 +104,6 @@ class Race
     public function getDrivers(): Collection
     {
         return $this->drivers;
-    }
-
-    public function addDriver(Driver $driver): self
-    {
-        if (!$this->drivers->contains($driver)) {
-            $this->drivers[] = $driver;
-            $driver->addRace($this);
-        }
-
-        return $this;
     }
 
     public function removeDriver(Driver $driver): self
@@ -129,13 +148,6 @@ class Race
     public function getName(): ?string
     {
         return $this->name;
-    }
-
-    public function setName(?string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getLeague(): ?League

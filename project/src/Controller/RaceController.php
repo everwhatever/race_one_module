@@ -2,31 +2,30 @@
 
 namespace App\Controller;
 
-use App\Entity\Race;
-use App\Entity\Time;
 use App\Form\CreateRaceType;
-use App\Services\Time\TimeCreator;
-use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Message\Command\CreateRaceCommand;
+use App\Message\Query\GetOneRaceQuery;
+use App\Message\Query\GetRacesQuery;
+use App\Results\Dto\RaceResults;
+use App\Services\FormDataGetter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
 class RaceController extends AbstractController
 {
+    private FormDataGetter $dataGetter;
 
-    private EntityManagerInterface $entityManager;
-    private TimeCreator $timeService;
-
-
-    public function __construct(EntityManagerInterface $entityManager, TimeCreator $timeService)
+    public function __construct(FormDataGetter $dataGetter)
     {
-        $this->entityManager = $entityManager;
-        $this->timeService = $timeService;
+        $this->dataGetter = $dataGetter;
     }
+
 
     /**
      * @Route("/", name="index")
@@ -40,21 +39,26 @@ class RaceController extends AbstractController
      * @Route("/choose", name="app_choose_drivers")
      * @IsGranted("ROLE_USER")
      * @param Request $request
+     * @param MessageBusInterface $commandBus
      * @return Response
      */
-    public function chooseDriversAction(Request $request): Response
+    public function createAction(Request $request, MessageBusInterface $commandBus): Response
     {
         $form = $this->createForm(CreateRaceType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $race = $form->getData();
-            $race->setDate(new DateTime());
 
-            $this->entityManager->persist($race);
-            $this->entityManager->flush();
+            $formData = $form->getData();
+            $driversIds = $this->dataGetter->getDriversIds($formData['drivers']);
 
-            return $this->redirectToRoute('app_race', ['id' => $race->getId()]);
+            $message = new CreateRaceCommand($driversIds, $formData['name']);
+            $envelope = $commandBus->dispatch($message);
+            /** @var HandledStamp $handledStamp */
+            $handledStamp = $envelope->last(HandledStamp::class);
+            $result = $handledStamp->getResult();
+
+            return $this->redirectToRoute("app_show_one_race", ['id' => $result->getId()]);
         }
 
         return $this->render('race/choose_drivers.html.twig', [
@@ -62,55 +66,44 @@ class RaceController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/race/{id}", name="app_race")
-     * @IsGranted("ROLE_USER")
-     * @param int $id
-     * @return Response
-     */
-    public function raceAction(int $id): Response
-    {
-        $raceRepository = $this->entityManager->getRepository(Race::class);
-        $race = $raceRepository->findOneBy(['id' => $id]);
-
-        $times = $this->timeService->setSimulatedParams($race);
-
-        return $this->render('race/race.html.twig', [
-            'race' => $race,
-            'times' => $times
-        ]);
-    }
 
     /**
      * @Route("/races", name="app_all_races")
+     * @param MessageBusInterface $queryBus
      * @return Response
      */
-    public function displayAllRacesAction(): Response
+    public function displayAllRacesAction(MessageBusInterface $queryBus): Response
     {
-        $raceRepository = $this->entityManager->getRepository(Race::class);
-        $races = $raceRepository->findAll();
+        $message = new GetRacesQuery();
+        $envelope = $queryBus->dispatch($message);
+        /** @var HandledStamp $handleStamp */
+        $handleStamp = $envelope->last(HandledStamp::class);
+        $racesDto = $handleStamp->getResult();
 
         return $this->render('race/display_all_races.html.twig', [
-            'races' => $races
+            'races' => $racesDto->getRaces()
         ]);
     }
 
     /**
      * @Route("/show/race/{id}", name="app_show_one_race")
      * @param int $id
+     * @param MessageBusInterface $queryBus
      * @return Response
      */
-    public function displayOneRaceAction(int $id): Response
+    public function displayOneRaceAction(int $id, MessageBusInterface $queryBus): Response
     {
-        $raceRepository = $this->entityManager->getRepository(Race::class);
-        $race = $raceRepository->findOneBy(['id' => $id]);
+        $message = new GetOneRaceQuery($id);
+        $envelope = $queryBus->dispatch($message);
+        /** @var HandledStamp $handleStamp */
+        $handleStamp = $envelope->last(HandledStamp::class);
+        /** @var RaceResults $racesDto */
+        $racesDto = $handleStamp->getResult();
 
-        $timeRepository = $this->entityManager->getRepository(Time::class);
-        $times = $timeRepository->findBy(['races' => $race]);
 
         return $this->render('race/show_one_race.html.twig', [
-            'race' => $race,
-            'times' => $times
+            'raceName' => $racesDto->getRaceName(),
+            'results' => $racesDto->getResults()
         ]);
     }
 }

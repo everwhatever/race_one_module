@@ -20,7 +20,8 @@
             {% for driver in drivers %}
                 <tr>
                     <th scope="row">{{ driver.getId() }}</th>
-                    <td><a style="" href="{{ path('app_driver',{'id':driver.getId()}) }}">{{ driver.getEmail() }}</a></td>
+                    <td><a style="" href="{{ path('app_driver',{'id':driver.getId()}) }}">
+                            {{ driver.getDriverEmail() }}</a></td>
                 </tr>
             {% endfor %}
             </tbody>

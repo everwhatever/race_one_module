@@ -5,10 +5,7 @@
 {% block body %}
 
     <div class="d-flex align-items-center justify-content-center" style="height: 35px">
-        <h2>{{ race.getName() }}</h2>
-    </div>
-    <div class="d-flex align-items-center justify-content-center" style="height: 35px">
-        <h4>data: {{ race.getDate()|date("d-m-Y") }}</h4>
+        <h2>{{ raceName }}</h2>
     </div>
 
 
@@ -23,11 +20,11 @@
             </tr>
             </thead>
             <tbody>
-            {% for time in times %}
+            {% for result in results %}
                 <tr>
-                    <th scope="row">{{ time.getPosition() }}</th>
-                    <td>{{ time.getDrivers().getEmail() }}</td>
-                    <td>{{ time.getTime()|date("H:i:s") }}</td>
+                    <th scope="row">{{ result.getPosition() }}</th>
+                    <td>{{ result.getDriverEmail() }}</td>
+                    <td>{{ result.getTime()|date("H:i:s") }}</td>
                 </tr>
             {% endfor %}
 

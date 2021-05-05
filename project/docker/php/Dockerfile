@@ -25,3 +25,8 @@ RUN PATH=$PATH:/usr/src/app/vendor/bin:bin
 
 RUN composer install --no-scripts --prefer-dist \
   && rm -rf "$(composer config cache-dir)" "$(composer config data-dir)"
+
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions amqp

@@ -37,22 +37,17 @@ class DriverRepository extends ServiceEntityRepository implements PasswordUpgrad
         $this->_em->flush();
     }
 
-    // /**
-    //  * @return Driver[] Returns an array of Driver objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Driver[]
+     */
+    public function findByIds(array $ids): array
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
+            ->where('d.id IN (:ids)')
+            ->setParameter('ids', $ids)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Driver

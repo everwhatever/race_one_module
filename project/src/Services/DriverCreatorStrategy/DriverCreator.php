@@ -8,15 +8,8 @@ use App\Entity\Driver;
 
 class DriverCreator
 {
-    private DriverCreatorStrategyInterface $driverCreator;
-
-    public function __construct(DriverCreatorStrategyInterface $driverCreator)
+    public function create(string $email, string $password, DriverCreatorStrategyInterface $creatorStrategy): Driver
     {
-        $this->driverCreator = $driverCreator;
-    }
-
-    public function create(Driver $driver)
-    {
-        $this->driverCreator->createDriver($driver);
+        return $creatorStrategy->createDriver($email, $password);
     }
 }

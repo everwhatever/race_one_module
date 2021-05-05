@@ -32,3 +32,13 @@ services:
         tags: ['@doctrine.orm.default_entity_manager']
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\MessageHandler\Command\:
+        resource: '../src/MessageHandler/Command/'
+        autoconfigure: false
+        tags: [ { name: messenger.message_handler, bus: command.bus } ]
+
+    App\MessageHandler\Query\:
+        resource: '../src/MessageHandler/Query/'
+        autoconfigure: false
+        tags: [ { name: messenger.message_handler, bus: query.bus } ]

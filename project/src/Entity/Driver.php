@@ -43,23 +43,28 @@ class Driver implements UserInterface
     /**
      * @ORM\ManyToMany(targetEntity=Race::class, inversedBy="drivers")
      */
-    private ArrayCollection $races;
+    private Collection $races;
 
     /**
      * @ORM\OneToMany(targetEntity=Time::class, mappedBy="drivers")
      */
-    private ArrayCollection $times;
+    private Collection $times;
 
     /**
-     * @ORM\ManyToMany(targetEntity=League::class, mappedBy="Drivers")
+     * @ORM\ManyToMany(targetEntity=League::class, mappedBy="drivers")
      */
-    private ArrayCollection $leagues;
+    private Collection $leagues;
 
     #[Pure] public function __construct()
     {
         $this->races = new ArrayCollection();
         $this->times = new ArrayCollection();
         $this->leagues = new ArrayCollection();
+    }
+
+    public function getUsername(): string
+    {
+        return $this->email;
     }
 
     public function getId(): ?int
@@ -72,21 +77,12 @@ class Driver implements UserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    /**
+     * @param string|null $email
+     */
+    public function setEmail(?string $email): void
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUsername(): string
-    {
-        return (string)$this->email;
     }
 
     /**
@@ -101,43 +97,12 @@ class Driver implements UserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    /**
+     * @param array $roles
+     */
+    public function setRoles(array $roles): void
     {
         $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getSalt()
-    {
-        // not needed when using the "bcrypt" algorithm in security.yaml
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 
     /**
@@ -157,13 +122,6 @@ class Driver implements UserInterface
         return $this;
     }
 
-    public function removeRace(Race $race): self
-    {
-        $this->races->removeElement($race);
-
-        return $this;
-    }
-
     /**
      * @return Collection
      */
@@ -177,18 +135,6 @@ class Driver implements UserInterface
         if (!$this->times->contains($time)) {
             $this->times[] = $time;
             $time->setDrivers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTime(Time $time): self
-    {
-        if ($this->times->removeElement($time)) {
-            // set the owning side to null (unless already changed)
-            if ($time->getDrivers() === $this) {
-                $time->setDrivers(null);
-            }
         }
 
         return $this;
@@ -212,17 +158,31 @@ class Driver implements UserInterface
         return $this;
     }
 
-    public function removeLeague(League $league): self
+    public function __toString()
     {
-        if ($this->leagues->removeElement($league)) {
-            $league->removeDriver($this);
-        }
-
-        return $this;
+        return $this->email;
     }
 
-    public function __call(string $name, array $arguments)
+    public function getPassword()
     {
-        // TODO: Implement @method string getUserIdentifier()
+        // TODO: Implement getPassword() method.
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }
