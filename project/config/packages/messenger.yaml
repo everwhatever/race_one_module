@@ -17,5 +17,5 @@ framework:
 
     routing:
         # Route your messages to the transports
-         'App\Message\Command\CreateRaceCommand': sync
-         'App\Message\Query\GetRacesQuery': sync
+#         'App\Message\Command\CreateRaceCommand': sync
+#         'App\Message\Query\GetRacesQuery': sync

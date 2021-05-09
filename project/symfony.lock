@@ -93,8 +93,46 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.2.x-dev"
     },
+    "myclabs/deep-copy": {
+        "version": "1.x-dev"
+    },
     "nikic/php-parser": {
         "version": "v4.10.4"
+    },
+    "phar-io/manifest": {
+        "version": "2.0.x-dev"
+    },
+    "phar-io/version": {
+        "version": "3.1.0"
+    },
+    "phpunit/php-code-coverage": {
+        "version": "10.0-dev"
+    },
+    "phpunit/php-file-iterator": {
+        "version": "3.0-dev"
+    },
+    "phpunit/php-invoker": {
+        "version": "3.1-dev"
+    },
+    "phpunit/php-text-template": {
+        "version": "2.0-dev"
+    },
+    "phpunit/php-timer": {
+        "version": "5.0-dev"
+    },
+    "phpunit/phpunit": {
+        "version": "4.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.7",
+            "ref": "fc18a41d910bd168b6d83b09330d3dd892ddbcdd"
+        },
+        "files": [
+            ".env.test",
+            "phpunit.xml.dist",
+            "tests/bootstrap.php"
+        ]
     },
     "psr/cache": {
         "version": "1.0.x-dev"
@@ -107,6 +145,54 @@
     },
     "psr/log": {
         "version": "1.1.x-dev"
+    },
+    "sebastian/cli-parser": {
+        "version": "1.0-dev"
+    },
+    "sebastian/code-unit": {
+        "version": "2.0-dev"
+    },
+    "sebastian/code-unit-reverse-lookup": {
+        "version": "2.0-dev"
+    },
+    "sebastian/comparator": {
+        "version": "4.0-dev"
+    },
+    "sebastian/complexity": {
+        "version": "3.0-dev"
+    },
+    "sebastian/diff": {
+        "version": "4.0-dev"
+    },
+    "sebastian/environment": {
+        "version": "5.1-dev"
+    },
+    "sebastian/exporter": {
+        "version": "4.0-dev"
+    },
+    "sebastian/global-state": {
+        "version": "5.0-dev"
+    },
+    "sebastian/lines-of-code": {
+        "version": "2.0-dev"
+    },
+    "sebastian/object-enumerator": {
+        "version": "4.0-dev"
+    },
+    "sebastian/object-reflector": {
+        "version": "2.0-dev"
+    },
+    "sebastian/recursion-context": {
+        "version": "4.0-dev"
+    },
+    "sebastian/resource-operations": {
+        "version": "3.0-dev"
+    },
+    "sebastian/type": {
+        "version": "2.3-dev"
+    },
+    "sebastian/version": {
+        "version": "4.0-dev"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -121,6 +207,9 @@
         ]
     },
     "symfony/amqp-messenger": {
+        "version": "5.x-dev"
+    },
+    "symfony/browser-kit": {
         "version": "5.x-dev"
     },
     "symfony/cache": {
@@ -144,6 +233,9 @@
             "bin/console"
         ]
     },
+    "symfony/css-selector": {
+        "version": "5.x-dev"
+    },
     "symfony/dependency-injection": {
         "version": "5.x-dev"
     },
@@ -154,6 +246,9 @@
         "version": "5.x-dev"
     },
     "symfony/doctrine-messenger": {
+        "version": "5.x-dev"
+    },
+    "symfony/dom-crawler": {
         "version": "5.x-dev"
     },
     "symfony/dotenv": {
@@ -251,6 +346,21 @@
     "symfony/password-hasher": {
         "version": "5.x-dev"
     },
+    "symfony/phpunit-bridge": {
+        "version": "5.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.3",
+            "ref": "f07736291c9247ad846269d336ff0489c9e45944"
+        },
+        "files": [
+            ".env.test",
+            "bin/phpunit",
+            "phpunit.xml.dist",
+            "tests/bootstrap.php"
+        ]
+    },
     "symfony/polyfill-intl-grapheme": {
         "version": "1.22-dev"
     },
@@ -328,6 +438,9 @@
     "symfony/string": {
         "version": "5.x-dev"
     },
+    "symfony/test-pack": {
+        "version": "dev-main"
+    },
     "symfony/translation-contracts": {
         "version": "2.3-dev"
     },
@@ -372,6 +485,9 @@
     },
     "symfony/yaml": {
         "version": "5.x-dev"
+    },
+    "theseer/tokenizer": {
+        "version": "1.2.0"
     },
     "twig/extra-bundle": {
         "version": "3.x-dev"

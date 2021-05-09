@@ -10,9 +10,27 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-            App:
+            Driver:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+                dir: '%kernel.project_dir%/src/Driver/Domain/Model'
+                prefix: 'App\Driver\Domain\Model'
+                alias: Driver
+            Time:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Driver/Domain/Model'
+                prefix: 'App\Time\Domain\Model'
+                alias: Time
+            Race:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Race/Domain/Model'
+                prefix: 'App\Race\Domain\Model'
+                alias: Race
+            League:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/League/Domain/Model'
+                prefix: 'App\League\Domain\Model'
+                alias: League
