@@ -5,6 +5,7 @@ namespace App\Driver\UI\Controller;
 
 use App\Driver\Application\Message\Command\CreateDriverCommand;
 use App\Driver\Application\Security\LoginFormAuthenticator;
+use App\Driver\Domain\Model\Driver;
 use App\Driver\Infrastructure\Form\RegistrationFormType;
 use App\Driver\Infrastructure\Service\DriverCreatorStrategy\NormalDriverCreatorStrategy;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class RegisterAction extends AbstractController

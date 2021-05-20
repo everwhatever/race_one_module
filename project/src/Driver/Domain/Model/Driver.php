@@ -2,15 +2,12 @@
 
 namespace App\Driver\Domain\Model;
 
-use App\League\Domain\Model\League;
-use App\Race\Domain\Model\Race;
-use App\Race\Domain\Model\Time;
+
 use App\Driver\Infrastructure\Repository\DriverRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -18,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  * @method string getUserIdentifier()
  */
-class Driver implements UserInterface
+class Driver implements PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
@@ -44,25 +41,25 @@ class Driver implements UserInterface
     private string $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Race::class, inversedBy="drivers")
+     * @ORM\Column(type="array")
      */
-    private Collection $races;
+    private array $racesIds;
 
     /**
-     * @ORM\OneToMany(targetEntity=Time::class, mappedBy="drivers")
+     * @ORM\Column(type="array")
      */
-    private Collection $times;
+    private array $timesIds;
 
     /**
-     * @ORM\ManyToMany(targetEntity=League::class, mappedBy="drivers")
+     * @ORM\Column(type="array")
      */
-    private Collection $leagues;
+    private array $leaguesIds;
 
     #[Pure] public function __construct()
     {
-        $this->races = new ArrayCollection();
-        $this->times = new ArrayCollection();
-        $this->leagues = new ArrayCollection();
+        $this->racesIds = [];
+        $this->timesIds = [];
+        $this->leaguesIds = [];
     }
 
     public function getUsername(): string
@@ -108,54 +105,55 @@ class Driver implements UserInterface
         $this->roles = $roles;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getRaces(): Collection
+
+    public function getRacesIds(): array
     {
-        return $this->races;
+        return $this->racesIds;
     }
 
-    public function addRace(Race $race): self
+    public function addRaceId(int $raceId): self
     {
-        if (!$this->races->contains($race)) {
-            $this->races[] = $race;
+        if (!in_array($raceId, $this->racesIds)) {
+            $this->racesIds[] = $raceId;
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getTimes(): Collection
+    public function addRacesIds(array $racesIds): void
     {
-        return $this->times;
+        foreach ($racesIds as $racesId){
+            $this->addRaceId($racesId);
+        }
     }
 
-    public function addTime(Time $time): self
+    /**
+     * @return array
+     */
+    public function getTimesIds(): array
     {
-        if (!$this->times->contains($time)) {
-            $this->times[] = $time;
-            $time->setDrivers($this);
+        return $this->timesIds;
+    }
+
+    public function addTimeId(int $timeId): self
+    {
+        if (!in_array($timeId, $this->timesIds)) {
+            $this->timesIds[] = $timeId;
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getLeagues(): Collection
+
+    public function getLeaguesIds(): array
     {
-        return $this->leagues;
+        return $this->leaguesIds;
     }
 
-    public function addLeague(League $league): self
+    public function addLeague(int $leagueId): self
     {
-        if (!$this->leagues->contains($league)) {
-            $this->leagues[] = $league;
-            $league->addDriver($this);
+        if (!in_array($leagueId, $this->leaguesIds)) {
+            $this->leaguesIds[] = $leagueId;
         }
 
         return $this;
@@ -166,9 +164,9 @@ class Driver implements UserInterface
         return $this->email;
     }
 
-    public function getPassword()
+    public function getPassword(): ?string
     {
-        // TODO: Implement getPassword() method.
+        return null;
     }
 
     /**
@@ -181,11 +179,9 @@ class Driver implements UserInterface
 
     public function getSalt()
     {
-        // TODO: Implement getSalt() method.
     }
 
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
     }
 }

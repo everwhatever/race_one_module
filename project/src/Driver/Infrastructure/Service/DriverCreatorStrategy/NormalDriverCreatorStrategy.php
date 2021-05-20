@@ -6,14 +6,14 @@ namespace App\Driver\Infrastructure\Service\DriverCreatorStrategy;
 
 use App\Driver\Domain\Model\Driver;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class NormalDriverCreatorStrategy implements DriverCreatorStrategyInterface
 {
     private EntityManagerInterface $entityManager;
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->passwordEncoder = $passwordEncoder;
@@ -23,7 +23,7 @@ class NormalDriverCreatorStrategy implements DriverCreatorStrategyInterface
     {
         $driver = new Driver();
         $driver->setEmail($email);
-        $driver->setPassword($this->passwordEncoder->encodePassword($driver, $password));
+        $driver->setPassword($this->passwordEncoder->hashPassword($driver, $password));
         $driver->setRoles(['ROLE_USER']);
 
 

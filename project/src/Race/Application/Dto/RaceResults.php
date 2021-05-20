@@ -6,29 +6,24 @@ namespace App\Race\Application\Dto;
 
 class RaceResults
 {
-    private ?array $results;
+    private array $results = [];
     private string $raceName;
 
-    /**
-     * Races constructor.
-     */
-    public function __construct(string $raceName, array $results = null)
+    public function __construct(string $raceName)
     {
-        $this->results = $results ? $results : [];
         $this->raceName = $raceName;
     }
 
-    /**
-     * @return string
-     */
     public function getRaceName(): string
     {
         return $this->raceName;
     }
 
-    public function addResult(EachRaceResult $result): void
+    public function addResult(EachRaceResult $result)
     {
-        $this->results[] = $result;
+        if (!in_array($result, $this->results)) {
+            $this->results[] = $result;
+        }
     }
 
     public function getResults(): array

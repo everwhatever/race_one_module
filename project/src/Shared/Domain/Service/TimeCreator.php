@@ -1,9 +1,10 @@
 <?php
 
 
-namespace App\Race\Domain\Service;
+namespace App\Shared\Domain\Service;
 
 
+use App\Driver\Infrastructure\Repository\DriverRepository;
 use App\Race\Domain\Model\Race;
 use App\Race\Domain\Model\Time;
 use App\Race\Infrastructure\Service\TimeSaver;
@@ -14,11 +15,14 @@ class TimeCreator
 
     private TimeSaver $timeSaver;
     private EntityManagerInterface $entityManager;
+    private DriverRepository $driverRepository;
 
-    public function __construct(TimeSaver $timeSaver, EntityManagerInterface $entityManager)
+    public function __construct(TimeSaver $timeSaver, EntityManagerInterface $entityManager,
+                                DriverRepository $driverRepository)
     {
         $this->timeSaver = $timeSaver;
         $this->entityManager = $entityManager;
+        $this->driverRepository = $driverRepository;
     }
 
     /**
@@ -27,15 +31,18 @@ class TimeCreator
      */
     public function setSimulatedParams(Race $race): array
     {
-        $drivers = $race->getDrivers();
+        $driversIds = $race->getDriversIds();
+        $drivers = $this->driverRepository->findByIds($driversIds);
         $times = [];
 
         foreach ($drivers as $driver) {
             $time = $this->createSimulatedTime();
-            $driver->addTime($time);
+            $time->setDriverId($driver->getId());
             $race->addTime($time);
             $this->entityManager->persist($time);
             $this->entityManager->flush();
+            $driver->addTimeId($time->getId())
+                ->addRaceId($race->getId());
 
             array_push($times, $time);
         }

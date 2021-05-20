@@ -37,10 +37,9 @@ class CreateLeagueAction extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            $racesNames = $this->dataGetter->getRacesNames($formData['races']);
-            $driversIds = $this->dataGetter->getDriversIds($formData['drivers']);
+            $racesNames = $this->dataGetter->getRacesNames($formData['racesNames']);
 
-            $this->command($driversIds, $racesNames, $formData['name']);
+            $this->command($formData['driversIds'], $racesNames, $formData['name']);
 
 
             return $this->redirectToRoute("league_display_all");

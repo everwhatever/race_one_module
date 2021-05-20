@@ -2,8 +2,6 @@
 
 namespace App\Race\Domain\Model;
 
-use App\Driver\Domain\Model\Driver;
-use App\League\Domain\Model\League;
 use App\Race\Infrastructure\Repository\RaceRepository;
 use DateTime;
 use DateTimeInterface;
@@ -21,7 +19,7 @@ class Race
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="datetime")
@@ -29,9 +27,9 @@ class Race
     private ?DateTimeInterface $date;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Driver::class, mappedBy="races")
+     * @ORM\Column(type="array")
      */
-    private Collection $drivers;
+    private array $driversIds = [];
 
     /**
      * @ORM\OneToMany(targetEntity=Time::class, mappedBy="races")
@@ -44,43 +42,41 @@ class Race
     private ?string $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=League::class, inversedBy="Races")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private ?League $league;
+    private ?int $leagueId;
 
-    private function __construct(string $name, array $drivers)
+    private function __construct(string $name, array $driversIds)
     {
-        $this->drivers = new ArrayCollection();
         $this->times = new ArrayCollection();
 
         $this->name = $name;
-        $this->addDrivers($drivers);
+        $this->addDriversIds($driversIds);
         $this->date = new DateTime();
     }
 
     /**
-     * @param Driver[] $drivers
+     * @param array $driversIds
      */
-    private function addDrivers(array $drivers): void
+    private function addDriversIds(array $driversIds): void
     {
-        foreach ($drivers as $driver) {
-            $this->addDriver($driver);
+        foreach ($driversIds as $driverId) {
+            $this->addDriverId($driverId);
         }
     }
 
-    public function addDriver(Driver $driver): self
+    public function addDriverId(int $driverId): self
     {
-        if (!$this->drivers->contains($driver)) {
-            $this->drivers[] = $driver;
-            $driver->addRace($this);
+        if (!in_array($driverId, $this->driversIds)) {
+            $this->driversIds[] = $driverId;
         }
 
         return $this;
     }
 
-    public static function create(string $name, array $drivers): self
+    public static function create(string $name, array $driversIds): self
     {
-        return new self($name, $drivers);
+        return new self($name, $driversIds);
     }
 
     public function getId(): ?int
@@ -101,11 +97,11 @@ class Race
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getDrivers(): Collection
+    public function getDriversIds(): array
     {
-        return $this->drivers;
+        return $this->driversIds;
     }
 
     /**
@@ -126,31 +122,19 @@ class Race
         return $this;
     }
 
-    public function removeTime(Time $time): self
-    {
-        if ($this->times->removeElement($time)) {
-            // set the owning side to null (unless already changed)
-            if ($time->getRaces() === $this) {
-                $time->setRaces(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function getLeague(): ?League
+    public function getLeagueId(): ?int
     {
-        return $this->league;
+        return $this->leagueId;
     }
 
-    public function setLeague(?League $league): self
+    public function setLeagueId(int $leagueId): self
     {
-        $this->league = $league;
+        $this->leagueId = $leagueId;
 
         return $this;
     }

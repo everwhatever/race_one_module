@@ -3,27 +3,17 @@
 
 namespace App\Driver\Application\Dto;
 
-
+use App\Race\Domain\Model\Time;
 use JetBrains\PhpStorm\Pure;
 
 class EachDriverResult
 {
-    private int $position;
-    private string $raceName;
-    private string $raceTime;
-    private int $raceId;
 
-    private function __construct(int $position, string $raceName, string $raceTime, int $raceId)
-    {
-        $this->position = $position;
-        $this->raceName = $raceName;
-        $this->raceTime = $raceTime;
-        $this->raceId = $raceId;
-    }
+    private ?Time $time;
 
-    #[Pure] public static function create(int $position, string $raceName, string $raceTime, int $raceId): self
+    public function __construct(Time $time)
     {
-        return new self($position, $raceName, $raceTime, $raceId);
+        $this->time = $time;
     }
 
     /**
@@ -31,15 +21,15 @@ class EachDriverResult
      */
     public function getRaceId(): int
     {
-        return $this->raceId;
+        return $this->time->getRaces()->getId();
     }
 
     /**
      * @return int
      */
-    public function getPosition(): int
+    #[Pure] public function getPosition(): int
     {
-        return $this->position;
+        return $this->time->getPosition();
     }
 
     /**
@@ -47,15 +37,16 @@ class EachDriverResult
      */
     public function getRaceName(): string
     {
-        return $this->raceName;
+        return $this->time->getRaces()->getName();
+
     }
 
     /**
      * @return string
      */
-    public function getRaceTime(): string
+    #[Pure] public function getRaceTime(): string
     {
-        return $this->raceTime;
+        return $this->time->getTime();
     }
 
 }

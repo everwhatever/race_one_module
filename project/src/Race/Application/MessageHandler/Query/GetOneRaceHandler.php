@@ -4,9 +4,11 @@
 namespace App\Race\Application\MessageHandler\Query;
 
 
+use App\Driver\Infrastructure\Repository\DriverRepository;
 use App\Race\Application\Dto\EachRaceResult;
 use App\Race\Application\Dto\RaceResults;
 use App\Race\Application\Message\Query\GetOneRaceQuery;
+use App\Race\Domain\Model\Time;
 use App\Race\Infrastructure\Repository\RaceRepository;
 use App\Race\Infrastructure\Repository\TimeRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -15,11 +17,15 @@ class GetOneRaceHandler implements MessageHandlerInterface
 {
     private RaceRepository $raceRepository;
     private TimeRepository $timeRepository;
+    private DriverRepository $driverRepository;
 
-    public function __construct(RaceRepository $raceRepository, TimeRepository $timeRepository)
+    //TODO: usunąć jakoś DriverRepository
+    public function __construct(RaceRepository $raceRepository, TimeRepository $timeRepository,
+                                DriverRepository $driverRepository)
     {
         $this->raceRepository = $raceRepository;
         $this->timeRepository = $timeRepository;
+        $this->driverRepository = $driverRepository;
     }
 
     public function __invoke(GetOneRaceQuery $query): RaceResults
@@ -30,9 +36,10 @@ class GetOneRaceHandler implements MessageHandlerInterface
         $times = $this->sortTimes($times);
 
         $raceResults = new RaceResults($race->getName());
+        /** @var Time $time */
         foreach ($times as $time) {
-            $raceResults->addResult(EachRaceResult::create($time->getPosition(), $time->getDrivers()->getEmail(),
-                $time->getTime()));
+            $raceResults->addResult(new EachRaceResult($time->getPosition(),
+                $time->getTime(), $this->driverRepository->findOneBy(['id'=>$time->getDriverId()])->getEmail()));
         }
 
         return $raceResults;

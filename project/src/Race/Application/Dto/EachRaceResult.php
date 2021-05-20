@@ -1,27 +1,19 @@
 <?php
 
-
 namespace App\Race\Application\Dto;
 
-
-use JetBrains\PhpStorm\Pure;
 
 class EachRaceResult
 {
     private int $position;
-    private string $driverEmail;
     private string $time;
+    private string $driverEmail;
 
-    private function __construct(int $position, string $driverEmail, string $time)
+    public function __construct(int $position, string $time, string $driverEmail)
     {
         $this->position = $position;
-        $this->driverEmail = $driverEmail;
         $this->time = $time;
-    }
-
-    #[Pure] public static function create(int $position, string $driverEmail, string $time): self
-    {
-        return new self($position, $driverEmail, $time);
+        $this->driverEmail = $driverEmail;
     }
 
     /**

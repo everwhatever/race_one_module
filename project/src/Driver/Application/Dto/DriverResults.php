@@ -6,18 +6,19 @@ namespace App\Driver\Application\Dto;
 
 class DriverResults
 {
-    private array $results;
+    private array $results = [];
     private string $driverEmail;
 
-    public function __construct(string $driverEmail, array $results = null)
+    public function __construct(string $driverEmail)
     {
-        $this->results = $results ? $results : [];
         $this->driverEmail = $driverEmail;
     }
 
     public function addResult(EachDriverResult $result): void
     {
-        $this->results[] = $result;
+        if (!in_array($result, $this->results)) {
+            $this->results[] = $result;
+        }
     }
 
     public function getResults(): array

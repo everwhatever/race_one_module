@@ -28,14 +28,14 @@ class League
     private ?string $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Race::class, mappedBy="league")
+     * @ORM\Column(type="array")
      */
-    private Collection $Races;
+    private array $racesIds;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Driver::class, inversedBy="leagues")
+     * @ORM\Column(type="array")
      */
-    private Collection $Drivers;
+    private array $driversIds;
 
     /**
      * @ORM\Column(type="array")
@@ -44,8 +44,8 @@ class League
 
     #[Pure] public function __construct()
     {
-        $this->Races = new ArrayCollection();
-        $this->Drivers = new ArrayCollection();
+        $this->racesIds = [];
+        $this->driversIds = [];
     }
 
     public function getId(): ?int
@@ -66,55 +66,49 @@ class League
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getRaces(): Collection
+    public function getRacesIds(): array
     {
-        return $this->Races;
+        return $this->racesIds;
     }
 
-    public function addRace(Race $race): self
+    public function addRacesIds(array $racesIds): void
     {
-        if (!$this->Races->contains($race)) {
-            $this->Races[] = $race;
-            $race->setLeague($this);
+        foreach ($racesIds as $racesId){
+            $this->addRaceId($racesId);
         }
-
-        return $this;
     }
 
-    public function removeRace(Race $race): self
+    public function addRaceId(int $raceId): self
     {
-        if ($this->Races->removeElement($race)) {
-            // set the owning side to null (unless already changed)
-            if ($race->getLeague() === $this) {
-                $race->setLeague(null);
-            }
+        if (!in_array($raceId, $this->racesIds)) {
+            $this->racesIds[] = $raceId;
         }
 
         return $this;
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getDrivers(): Collection
+    public function getDriversIds(): array
     {
-        return $this->Drivers;
+        return $this->driversIds;
     }
 
-    public function addDriver(Driver $driver): self
+    public function addDriversIds(array $driversIds): void
     {
-        if (!$this->Drivers->contains($driver)) {
-            $this->Drivers[] = $driver;
+        foreach ($driversIds as $driversId){
+            $this->addDriverId($driversId);
         }
-
-        return $this;
     }
 
-    public function removeDriver(Driver $driver): self
+    public function addDriverId(int $driverId): self
     {
-        $this->Drivers->removeElement($driver);
+        if (!in_array($driverId, $this->driversIds)) {
+            $this->driversIds[] = $driverId;
+        }
 
         return $this;
     }

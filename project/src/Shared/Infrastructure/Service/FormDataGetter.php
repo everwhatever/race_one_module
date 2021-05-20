@@ -4,7 +4,6 @@
 namespace App\Shared\Infrastructure\Service;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
 
 class FormDataGetter
 {
@@ -17,15 +16,5 @@ class FormDataGetter
         }
 
         return $racesNames;
-    }
-
-    public function getDriversIds(ArrayCollection $drivers): array
-    {
-        $driversIds = [];
-        foreach ($drivers as $driver) {
-            $driversIds[] = $driver->getId();
-        }
-
-        return $driversIds;
     }
 }

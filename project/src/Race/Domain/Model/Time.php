@@ -2,7 +2,6 @@
 
 namespace App\Race\Domain\Model;
 
-use App\Driver\Domain\Model\Driver;
 use App\Race\Infrastructure\Repository\TimeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,7 +15,7 @@ class Time
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string")
@@ -24,9 +23,9 @@ class Time
     private string $time;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Driver::class, inversedBy="times")
+     * @ORM\Column(type="integer")
      */
-    private ?Driver $drivers;
+    private int $driverId;
 
     /**
      * @ORM\ManyToOne(targetEntity=Race::class, inversedBy="times")
@@ -55,14 +54,14 @@ class Time
         return $this;
     }
 
-    public function getDrivers(): ?Driver
+    public function getDriverId(): int
     {
-        return $this->drivers;
+        return $this->driverId;
     }
 
-    public function setDrivers(?Driver $drivers): self
+    public function setDriverId(int $driverId): self
     {
-        $this->drivers = $drivers;
+        $this->driverId = $driverId;
 
         return $this;
     }

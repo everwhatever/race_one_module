@@ -4,7 +4,6 @@ namespace App\Race\UI\Controller;
 
 use App\Race\Application\Message\Command\CreateRaceCommand;
 use App\Shared\Infrastructure\Form\CreateRaceType;
-use App\Shared\Infrastructure\Service\FormDataGetter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,12 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateRaceAction extends AbstractController
 {
-    private FormDataGetter $dataGetter;
     private MessageBusInterface $commandBus;
 
-    public function __construct(FormDataGetter $dataGetter, MessageBusInterface $commandBus)
+    public function __construct( MessageBusInterface $commandBus)
     {
-        $this->dataGetter = $dataGetter;
         $this->commandBus = $commandBus;
     }
 
@@ -38,9 +35,7 @@ class CreateRaceAction extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $formData = $form->getData();
-            $driversIds = $this->dataGetter->getDriversIds($formData['drivers']);
-
-            $result = $this->command($driversIds, $formData['name']);
+            $result = $this->command($formData['driversIds'], $formData['name']);
 
             return $this->redirectToRoute("app_show_one_race", ['id' => $result->getId()]);
         }

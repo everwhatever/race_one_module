@@ -11,10 +11,10 @@
     <div class="d-flex align-items-center justify-content-center" style="height: 200px">
         {{ form_start(form) }}
         {{ form_row(form.name) }}
-        {{ form_row(form.drivers) }}
+        {{ form_row(form.driversIds) }}
 
-        <div class="col-sm-8 col-sm-offset-2" id="races_list" data-prototype="{{ form_widget(form.races.vars.prototype)|e('html_attr') }}">
-            {% for row in form.races %}
+        <div class="col-sm-8 col-sm-offset-2" id="races_list" data-prototype="{{ form_widget(form.racesNames.vars.prototype)|e('html_attr') }}">
+            {% for row in form.racesNames %}
                 <div class="panel panel-warning">
                     <div class="panel-heading">
                         <strong>{{ row.vars.value.name }}</strong>
