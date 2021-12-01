@@ -22,5 +22,4 @@ class CreateDriverHandler implements MessageHandlerInterface
     {
         return $this->driverCreator->create($command->getEmail(), $command->getPassword(), $command->getStrategy());
     }
-
 }
