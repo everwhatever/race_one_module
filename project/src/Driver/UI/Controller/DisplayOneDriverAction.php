@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Driver\UI\Controller;
+declare(strict_types=1);
 
+namespace App\Driver\UI\Controller;
 
 use App\Driver\Application\Dto\DriverResults;
 use App\Driver\Application\Message\Query\GetOneDriverQuery;
@@ -22,8 +23,6 @@ class DisplayOneDriverAction extends AbstractController
 
     /**
      * @Route("/driver/{id}", name="app_driver")
-     * @param int $id
-     * @return Response
      */
     public function displayOneDriverProfileAction(int $id): Response
     {
@@ -35,17 +34,13 @@ class DisplayOneDriverAction extends AbstractController
         ]);
     }
 
-    /**
-     * @param int $id
-     * @return DriverResults
-     */
     private function query(int $id): DriverResults
     {
         $message = new GetOneDriverQuery($id);
         $envelope = $this->queryBus->dispatch($message);
         /** @var HandledStamp $handledStamp */
         $handledStamp = $envelope->last(HandledStamp::class);
-        /** @var DriverResults $results */
+
         return $handledStamp->getResult();
     }
 }
