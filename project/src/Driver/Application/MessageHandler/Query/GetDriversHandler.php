@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Driver\Application\MessageHandler\Query;
-
 
 use App\Driver\Application\Dto\Driver;
 use App\Driver\Application\Dto\Drivers;
