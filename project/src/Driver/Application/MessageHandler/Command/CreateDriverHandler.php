@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Driver\Application\MessageHandler\Command;
-
 
 use App\Driver\Application\Message\Command\CreateDriverCommand;
 use App\Driver\Domain\Model\Driver;
