@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Driver\Application\MessageHandler\Query;
-
 
 use App\Driver\Application\Dto\DriverResults;
 use App\Driver\Application\Dto\EachDriverResult;
@@ -14,6 +14,7 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 class GetOneDriverHandler implements MessageHandlerInterface
 {
     private DriverRepository $driverRepository;
+    
     private TimeRepository $timeRepository;
 
     public function __construct(DriverRepository $driverRepository, TimeRepository $timeRepository)
