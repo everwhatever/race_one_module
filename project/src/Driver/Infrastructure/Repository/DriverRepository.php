@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Driver\Infrastructure\Repository;
 
 use App\Driver\Domain\Model\Driver;
@@ -50,16 +52,4 @@ class DriverRepository extends ServiceEntityRepository implements PasswordUpgrad
             ->getQuery()
             ->getResult();
     }
-
-    /*
-    public function findOneBySomeField($value): ?Driver
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
