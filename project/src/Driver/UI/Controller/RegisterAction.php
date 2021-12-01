@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Driver\UI\Controller;
+declare(strict_types=1);
 
+namespace App\Driver\UI\Controller;
 
 use App\Driver\Application\Message\Command\CreateDriverCommand;
 use App\Driver\Application\Security\LoginFormAuthenticator;
@@ -63,11 +64,6 @@ class RegisterAction extends AbstractController
         ]);
     }
 
-    /**
-     * @param $email
-     * @param FormInterface $form
-     * @return mixed
-     */
     private function command($email, FormInterface $form): mixed
     {
         $message = new CreateDriverCommand($email, $form->get('plainPassword')->getData(),
@@ -75,6 +71,7 @@ class RegisterAction extends AbstractController
         $envelope = $this->commandBus->dispatch($message);
         /** @var HandledStamp $handledStamp */
         $handledStamp = $envelope->last(HandledStamp::class);
+        
         return $handledStamp->getResult();
     }
 }
