@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Driver\Domain\Model;
+declare(strict_types=1);
 
+namespace App\Driver\Domain\Model;
 
 use App\Driver\Infrastructure\Repository\DriverRepository;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -55,7 +55,7 @@ class Driver implements PasswordAuthenticatedUserInterface
      */
     private array $leaguesIds;
 
-    #[Pure] public function __construct()
+    public function __construct()
     {
         $this->racesIds = [];
         $this->timesIds = [];
@@ -77,17 +77,11 @@ class Driver implements PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    /**
-     * @param string|null $email
-     */
     public function setEmail(?string $email): void
     {
         $this->email = $email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -97,9 +91,6 @@ class Driver implements PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    /**
-     * @param array $roles
-     */
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;
@@ -127,9 +118,6 @@ class Driver implements PasswordAuthenticatedUserInterface
         }
     }
 
-    /**
-     * @return array
-     */
     public function getTimesIds(): array
     {
         return $this->timesIds;
@@ -169,9 +157,6 @@ class Driver implements PasswordAuthenticatedUserInterface
         return null;
     }
 
-    /**
-     * @param string $password
-     */
     public function setPassword(string $password): void
     {
         $this->password = $password;
