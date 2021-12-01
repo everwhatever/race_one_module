@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Driver\Application\Dto;
-
 
 class DriverResults
 {
     private array $results = [];
+    
     private string $driverEmail;
 
     public function __construct(string $driverEmail)
