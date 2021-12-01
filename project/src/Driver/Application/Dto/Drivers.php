@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Driver\Application\Dto;
-
 
 class Drivers
 {
@@ -10,17 +10,14 @@ class Drivers
 
     public function __construct(array $drivers = null)
     {
-        $this->drivers = $drivers ? $drivers : null;
+        $this->drivers = $drivers ?? null;
     }
 
-    public function addDriver(Driver $driver)
+    public function addDriver(Driver $driver): void
     {
         $this->drivers[] = $driver;
     }
 
-    /**
-     * @return array|null
-     */
     public function getDrivers(): ?array
     {
         return $this->drivers;
