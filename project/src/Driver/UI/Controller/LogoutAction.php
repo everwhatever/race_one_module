@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Driver\UI\Controller;
+declare(strict_types=1);
 
+namespace App\Driver\UI\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\LogicException;
