@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Driver\Infrastructure\Service\DriverCreatorStrategy;
-
 
 use App\Driver\Domain\Model\Driver;
 
