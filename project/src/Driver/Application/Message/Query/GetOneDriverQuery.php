@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Driver\Application\Message\Query;
-
 
 class GetOneDriverQuery
 {
@@ -13,12 +13,8 @@ class GetOneDriverQuery
         $this->id = $id;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
-
 }
