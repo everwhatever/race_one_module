@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Driver\Infrastructure\Service\DriverCreatorStrategy;
-
 
 use App\Driver\Domain\Model\Driver;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +11,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class NormalDriverCreatorStrategy implements DriverCreatorStrategyInterface
 {
     private EntityManagerInterface $entityManager;
+    
     private UserPasswordHasherInterface $passwordEncoder;
 
     public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordEncoder)
