@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Driver\UI\Controller;
+declare(strict_types=1);
 
+namespace App\Driver\UI\Controller;
 
 use App\Driver\Application\Dto\Drivers;
 use App\Driver\Application\Message\Query\GetDriversQuery;
@@ -22,8 +23,6 @@ class DisplayDriversAction extends AbstractController
 
     /**
      * @Route("/drivers", name="app_all_drivers")
-     *
-     * @return Response
      */
     public function displayAllDriversProfilesAction(): Response
     {
@@ -34,16 +33,13 @@ class DisplayDriversAction extends AbstractController
         ]);
     }
 
-    /**
-     * @return Drivers
-     */
     private function query(): Drivers
     {
         $message = new GetDriversQuery();
         $envelope = $this->queryBus->dispatch($message);
         /** @var HandledStamp $handledStamp */
         $handledStamp = $envelope->last(HandledStamp::class);
-        /** @var Drivers $driversDto */
+        
         return $handledStamp->getResult();
     }
 }
